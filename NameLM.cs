@@ -7,10 +7,6 @@ class NameLM
         string dataSet = "./names.txt";
 
         List<string> data = ReadDataSet(dataSet);
-        data.ForEach(Console.WriteLine);
-        
-        data = ReadDataSet("1", "2", "3");
-        data.ForEach(Console.WriteLine);
     }
 
     static List<string> ReadDataSet(string path)
@@ -39,15 +35,6 @@ class NameLM
         Debug.WriteLine($"data set length {names.Count()}");
 
         return names;
-    }
-
-    static List<string> ReadDataSet(string set1, string set2, string set3)
-    { 
-        List<string> data = new List<string>();
-        data.Add(set1);
-        data.Add(set2); 
-        data.Add(set3);
-        return data;
     }
 
 }
