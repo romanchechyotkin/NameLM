@@ -1,0 +1,15 @@
+D:\projects\NameLM\bin\Debug\net6.0\NameLM.exe
+D:\projects\NameLM\bin\Debug\net6.0\NameLM.deps.json
+D:\projects\NameLM\bin\Debug\net6.0\NameLM.runtimeconfig.json
+D:\projects\NameLM\bin\Debug\net6.0\NameLM.dll
+D:\projects\NameLM\bin\Debug\net6.0\NameLM.pdb
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.csproj.AssemblyReference.cache
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.AssemblyInfoInputs.cache
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.AssemblyInfo.cs
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.csproj.CoreCompileInputs.cache
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.dll
+D:\projects\NameLM\obj\Debug\net6.0\refint\NameLM.dll
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.pdb
+D:\projects\NameLM\obj\Debug\net6.0\NameLM.genruntimeconfig.cache
+D:\projects\NameLM\obj\Debug\net6.0\ref\NameLM.dll
