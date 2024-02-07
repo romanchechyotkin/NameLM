@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 
 class NameLM
 {
@@ -13,6 +12,7 @@ class NameLM
 
         Dictionary<string, int> stoi = GetStoi(data);
 
+        Dictionary<int, string> itos= GetItos(stoi);
     }
 
     static List<string> ReadDataSet(string path)
@@ -102,12 +102,32 @@ class NameLM
             }
         }
 
-        foreach (var tuple in stoi)
+        DebugDictionary("stoi", stoi);
+
+        return stoi;
+    }
+
+    static Dictionary<int, string> GetItos(Dictionary<string, int> stoi)
+    {
+        Dictionary<int, string> itos = new Dictionary<int, string>();
+
+        foreach (var kvp in stoi)
         {
-            Debug.WriteLine($"{tuple.Key} {tuple.Value}");
+            itos.Add(kvp.Value, kvp.Key);
         }
 
-        return new Dictionary<string, int>() { };
+        DebugDictionary("itos", itos);
+
+        return itos;
+    }
+
+    static void DebugDictionary<TKey, TValue>(string name, Dictionary<TKey, TValue> dictionary)
+    {
+        Debug.WriteLine($"{name}");
+        foreach (var kvp in dictionary)
+        {
+            Debug.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+        }
     }
 
 }
