@@ -10,6 +10,9 @@ class NameLM
         List<string> data = ReadDataSet(dataSet);
         
         Dictionary<Tuple<string, string>, int> bigrams = GetBigrams(data);
+
+        Dictionary<string, int> stoi = GetStoi(data);
+
     }
 
     static List<string> ReadDataSet(string path)
@@ -61,12 +64,50 @@ class NameLM
             }
         }
 
+        foreach (var bigram in bigrams)
+        {
+            Debug.WriteLine($"{bigram.Key}, {bigram.Value}");
+        }
+
         Debug.WriteLine($"bigrams all amount {bigrams.Count}");
 
         var maxBigram = bigrams.Aggregate((x, y) => x.Value > y.Value ? x : y);
         Debug.WriteLine($"max amout of bigram {maxBigram.Key} {maxBigram.Value}");
 
         return bigrams;
+    }
+
+    static Dictionary<string, int> GetStoi(List<string> data)
+    {
+        string concatenatedString = string.Join("", data.Select(d => d.Trim()));
+        char[] characters = concatenatedString.ToCharArray();
+
+        List<char> sortedList = characters.ToList();
+        sortedList.Sort();
+
+        IEnumerable<char> uniqueCharacters = sortedList.Distinct();
+        HashSet<char> characterSet = new HashSet<char>(uniqueCharacters);
+
+
+        Dictionary<string, int> stoi = new Dictionary<string, int>();
+
+        int index = 0;
+        stoi.Add('.'.ToString(), index);
+
+        foreach (var character in characterSet)
+        {
+            {
+                stoi.Add(character.ToString(), index + 1);
+                index++;    
+            }
+        }
+
+        foreach (var tuple in stoi)
+        {
+            Debug.WriteLine($"{tuple.Key} {tuple.Value}");
+        }
+
+        return new Dictionary<string, int>() { };
     }
 
 }
