@@ -12,7 +12,9 @@ class NameLM
 
         Dictionary<string, int> stoi = GetStoi(data);
 
-        Dictionary<int, string> itos= GetItos(stoi);
+        Dictionary<int, string> itos = GetItos(stoi);
+
+        float[,] matrix = BuildMatrix(data, stoi, itos);
     }
 
     static List<string> ReadDataSet(string path)
@@ -120,6 +122,34 @@ class NameLM
 
         return itos;
     }
+        
+    static float[,] BuildMatrix(List<string> data, Dictionary<string, int> stoi, Dictionary<int, string> itos)
+    {
+        float[,] matrix = new float[27, 27];
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            data[i] = data[i].Trim();
+
+            string[] chars = { "." };
+            string[] words_seq = data[i].Select(c => c.ToString()).ToArray();
+            chars = chars.Concat(words_seq).ToArray();
+            chars = chars.Concat(new string[] { "." }).ToArray();
+
+            var zipped = chars.Zip(chars.Skip(1), (ch1, ch2) => new { Ch1 = ch1, Ch2 = ch2 });
+
+            foreach (var bigram in zipped)
+            {
+                int idx1 = stoi[bigram.Ch1];
+                int idx2 = stoi[bigram.Ch2];
+                matrix[idx1, idx2] += 1;
+            }
+        }
+
+        DebugMatrix(matrix);
+
+        return matrix;
+    }
 
     static void DebugDictionary<TKey, TValue>(string name, Dictionary<TKey, TValue> dictionary)
     {
@@ -128,6 +158,20 @@ class NameLM
         {
             Debug.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
         }
+    }
+
+    static void DebugMatrix(float[,] matrix)
+    {
+
+        for (int row = 0; row < 27; row++)
+        {
+            for (int col = 0; col < 27; col++)
+            {
+                Console.Write($"{matrix[row, col]} ");
+            }
+            Console.WriteLine();
+        }
+
     }
 
 }
