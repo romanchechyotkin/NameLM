@@ -1,23 +1,15 @@
 ﻿using System.Diagnostics;
 
-class NameLM
+public interface LanguageModel
 {
-    static void Main(string[] args)
-    {
-        string dataSet = "./names.txt";
+    Dictionary<int, string> GetItos(Dictionary<string, int> stoi);
+    void DebugMatrix(float[,] matrix);
+    void DebugDictionary<TKey, TValue>(string name, Dictionary<TKey, TValue> dictionary);
+}
 
-        List<string> data = ReadDataSet(dataSet);
-        
-        Dictionary<Tuple<string, string>, int> bigrams = GetBigrams(data);
-
-        Dictionary<string, int> stoi = GetStoi(data);
-
-        Dictionary<int, string> itos = GetItos(stoi);
-
-        float[,] matrix = BuildMatrix(data, stoi, itos);
-    }
-
-    static List<string> ReadDataSet(string path)
+class NameLM: LanguageModel
+{
+    public List<string> ReadDataSet(string path)
     {
         string content = "";
         try
@@ -39,13 +31,13 @@ class NameLM
         {
             names.Add(name);
         }
-        
+
         Debug.WriteLine($"data set length {names.Count()}");
 
         return names;
     }
 
-    static Dictionary<Tuple<string, string>, int> GetBigrams(List<string> data)
+    public Dictionary<Tuple<string, string>, int> GetBigrams(List<string> data)
     {
         Dictionary<Tuple<string, string>, int> bigrams = new Dictionary<Tuple<string, string>, int>();
 
@@ -79,7 +71,7 @@ class NameLM
         return bigrams;
     }
 
-    static Dictionary<string, int> GetStoi(List<string> data)
+    public Dictionary<string, int> GetStoi(List<string> data)
     {
         string concatenatedString = string.Join("", data.Select(d => d.Trim()));
         char[] characters = concatenatedString.ToCharArray();
@@ -100,7 +92,7 @@ class NameLM
         {
             {
                 stoi.Add(character.ToString(), index + 1);
-                index++;    
+                index++;
             }
         }
 
@@ -109,7 +101,7 @@ class NameLM
         return stoi;
     }
 
-    static Dictionary<int, string> GetItos(Dictionary<string, int> stoi)
+    public Dictionary<int, string> GetItos(Dictionary<string, int> stoi)
     {
         Dictionary<int, string> itos = new Dictionary<int, string>();
 
@@ -122,8 +114,8 @@ class NameLM
 
         return itos;
     }
-        
-    static float[,] BuildMatrix(List<string> data, Dictionary<string, int> stoi, Dictionary<int, string> itos)
+
+    public float[,] BuildMatrix(List<string> data, Dictionary<string, int> stoi, Dictionary<int, string> itos)
     {
         float[,] matrix = new float[27, 27];
 
@@ -148,10 +140,12 @@ class NameLM
 
         DebugMatrix(matrix);
 
+
+
         return matrix;
     }
 
-    static void DebugDictionary<TKey, TValue>(string name, Dictionary<TKey, TValue> dictionary)
+    public void DebugDictionary<TKey, TValue>(string name, Dictionary<TKey, TValue> dictionary)
     {
         Debug.WriteLine($"{name}");
         foreach (var kvp in dictionary)
@@ -160,18 +154,72 @@ class NameLM
         }
     }
 
-    static void DebugMatrix(float[,] matrix)
+    public void DebugMatrix(float[,] matrix)
     {
 
         for (int row = 0; row < 27; row++)
         {
             for (int col = 0; col < 27; col++)
             {
-                Console.Write($"{matrix[row, col]} ");
+                Console.Write($"{matrix[row, col]}\t");
             }
             Console.WriteLine();
         }
 
+    }
+
+    public int CalculateTotalSum(float[] matrix)
+    {
+        int sum = 0;
+        foreach (int element in matrix)
+        {
+            sum += element;
+        }
+        return sum;
+    }
+    public float[] GetRow(float[,] matrix, int rowIndex)
+    {
+        int cols = matrix.GetLength(1);
+        float[] row = new float[cols];
+        for (int j = 0; j < cols; j++)
+        {
+            row[j] = matrix[rowIndex, j];
+        }
+        return row;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+
+        NameLM lm = new NameLM();
+
+        string dataSet = "./names.txt";
+
+        List<string> data = lm.ReadDataSet(dataSet);
+        
+        Dictionary<Tuple<string, string>, int> bigrams = lm.GetBigrams(data);
+
+        Dictionary<string, int> stoi = lm.GetStoi(data);
+
+        Dictionary<int, string> itos = lm.GetItos(stoi);
+
+        float[,] matrix = lm.BuildMatrix(data, stoi, itos);
+
+        Console.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for (int i = 0; i < 27; i++)
+        {
+            int totalSum = lm.CalculateTotalSum(lm.GetRow(matrix, i));
+            for (int j = 0; j < 27; j++)
+            {
+                matrix[i, j] = (float)Math.Round(matrix[i, j] / totalSum, 4);
+            }
+        }
+
+        lm.DebugMatrix(matrix);
     }
 
 }
